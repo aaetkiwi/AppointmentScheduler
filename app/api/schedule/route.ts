@@ -1,19 +1,13 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-interface AppointmentData {
-  name: string;
-  email: string;
-  date: string;
-  time: string;
-}
-
 export async function POST(req: Request) {
   try {
-    const data: AppointmentData = await req.json();
-    const { name, email, date, time } = data;
+    const { name, email, date, time } = await req.json();
 
+    // Configure your email transport here
     const transporter = nodemailer.createTransport({
+      // Add your email service configuration
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587'),
       auth: {
