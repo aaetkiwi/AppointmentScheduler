@@ -1,13 +1,19 @@
 "use client";
-
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+interface FormData {
+  name: string;
+  email: string;
+  date: string;
+  time: string;
+}
+
 const AppointmentScheduler = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     date: '',
@@ -15,7 +21,7 @@ const AppointmentScheduler = () => {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -23,7 +29,7 @@ const AppointmentScheduler = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await fetch('/api/schedule', {
@@ -33,7 +39,6 @@ const AppointmentScheduler = () => {
         },
         body: JSON.stringify(formData),
       });
-
       if (response.ok) {
         setSubmitted(true);
       } else {
@@ -79,7 +84,6 @@ const AppointmentScheduler = () => {
               placeholder="Dein Name"
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="email">E-Mail</Label>
             <Input
@@ -92,7 +96,6 @@ const AppointmentScheduler = () => {
               placeholder="deine@email.de"
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="date">Datum</Label>
             <Input
@@ -105,7 +108,6 @@ const AppointmentScheduler = () => {
               min={new Date().toISOString().split('T')[0]}
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="time">Uhrzeit</Label>
             <Input
@@ -119,7 +121,6 @@ const AppointmentScheduler = () => {
               max="17:00"
             />
           </div>
-
           <Button type="submit" className="w-full">
             Termin buchen
           </Button>
